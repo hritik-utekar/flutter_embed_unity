@@ -158,20 +158,5 @@ class FlutterEmbedUnityAndroidPlugin : FlutterPlugin, ActivityAware {
 
     // ActivityAware
     override fun onDetachedFromActivity() {
-        Log.i(logTag, "onDetachedFromActivity - the Flutter activity has been detached, unloading unity")
-        // Destroying Unity is important - it prevents the app from crashing if the user exits the app
-        // using the Android back button, then re-opens the app and navigates back to a screen with Unity
-        // (see https://github.com/learntoflutter/flutter_embed_unity/issues/39)
-        UnityPlayerSingleton.getInstance()?.destroy()
-        UnityPlayerSingleton.flutterActivity = null
-        // Remove the lifecycle observer
-        (activityPluginBinding?.lifecycle as? HiddenLifecycleReference)
-            ?.lifecycle
-            ?.removeObserver(resumeUnityOnActivityResume)
-        
-        activityPluginBinding = null
-
-        // channel is now invalid because the Activity is gone
-        removeMethodChannel()
     }
 }
